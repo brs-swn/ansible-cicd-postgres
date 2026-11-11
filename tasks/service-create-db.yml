@@ -1,0 +1,33 @@
+---
+- name: Create Database Users
+  become: yes
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    name: "{{ item.db_owner }}"
+    password: "{{ item.db_password }}"
+    role_attr_flags: REPLICATION
+  with_items: "{{ db_list }}"
+  tags:
+    - create_db
+
+- name: Create Databases
+  become: yes
+  become_user: postgres
+  community.postgresql.postgresql_db:
+    name: "{{ item.db_name }}"
+    owner: "{{ item.db_owner }}"
+    state: present
+  with_items: "{{ db_list }}"
+  tags:
+    - create_db
+
+- name: Modify Database Privileges
+  become: yes
+  become_user: postgres
+  community.postgresql.postgresql_user:
+    roles: "{{ item.db_owner }}"
+    login_db: "{{ item.db_name }}"
+    privs: ALL
+  with_items: "{{ db_list }}"
+  tags:
+    - create_db

@@ -1,0 +1,6 @@
+#SPDX-License-Identifier: GPL-2.0-or-later
+---
+- name: Install DNF Packages
+  ansible.builtin.dnf:
+    name={{ dnf_packages }}
+    state=latest

@@ -1,0 +1,5 @@
+#SPDX-License-Identifier: GPL-2.0-or-later
+---
+- include_tasks: server-install-packages.yml
+- include_tasks: service-configure-postgres.yml
+- include_tasks: service-create-db.yml

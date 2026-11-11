@@ -1,0 +1,33 @@
+---
+- name: Set OS-specific variables
+  set_fact:
+    _pg_config_dir: "{{ postgresql_config_dir }}"
+    _pg_service: "{{ 'postgresql' if ansible_os_family == 'Fedora' else 'postgresql-' + postgresql_version }}"
+
+- name: Deploy postgresql.conf
+  template:
+    src: postgresql.conf.j2
+    dest: "{{ _pg_config_dir }}/postgresql.conf"
+    owner: postgres
+    group: postgres
+    mode: '0644'
+    backup: true
+  notify: restart postgresql
+
+- name: Deploy pg_hba.conf
+  template:
+    src: pg_hba.conf.j2
+    dest: "{{ _pg_config_dir }}/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: '0640'
+    backup: true
+  notify: reload postgresql
+
+- name: Check PostgreSQL cluster status
+  become: true
+  become_user: postgres
+  command: "pg_lscluster {{ postgresql_version }} main"
+  register: pg_cluster
+  changed_when: false
+  when: ansible_os_family == "Debian"

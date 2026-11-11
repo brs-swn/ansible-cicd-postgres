@@ -1,0 +1,13 @@
+#SPDX-License-Identifier: GPL-2.0-or-later
+# handlers/main.yml
+# Handlers for PostgreSQL service management
+---
+- name: restart postgresql
+  systemd:
+    name: "{{ _pg_service }}"
+    state: restarted
+
+- name: reload postgresql
+  systemd:
+    name: "{{ _pg_service }}"
+    state: reloaded

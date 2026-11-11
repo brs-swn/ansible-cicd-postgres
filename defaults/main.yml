@@ -1,0 +1,66 @@
+#SPDX-License-Identifier: GPL-2.0-or-later
+---
+# Defaults file for Postgres
+# Override these in the global group_vars or vars/mainl.yml
+
+# Service RPMS
+dnf_packages:
+  - postgresql-server
+  - postgresql
+  - postgresql-private-libs
+  - python3-psycopg2
+  - libpq
+
+# Sensible defaults for PostgreSQL configuration
+postgresql_version: "18"
+postgresql_config_dir: "/var/lib/pgsql/data"
+
+# Connection settings
+postgresql_listen_addresses: "0.0.0.0"
+postgresql_port: 5432
+postgresql_max_connections: 100
+postgresql_superuser_reserved_connections: 3
+
+# Memory settings (tune based on available RAM)
+postgresql_shared_buffers: "256MB"
+postgresql_effective_cache_size: "768MB"
+postgresql_work_mem: "4MB"
+postgresql_maintenance_work_mem: "64MB"
+
+# WAL settings
+postgresql_wal_buffers: "16MB"
+postgresql_min_wal_size: "1GB"
+postgresql_max_wal_size: "4GB"
+postgresql_checkpoint_completion_target: 0.9
+
+# Query planner
+postgresql_random_page_cost: 1.1
+postgresql_effective_io_concurrency: 200
+postgresql_default_statistics_target: 100
+
+# Logging
+postgresql_log_destination: "stderr"
+postgresql_logging_collector: "on"
+postgresql_log_directory: "log"
+postgresql_log_filename: "postgresql-%Y-%m-%d_%H%M%S.log"
+postgresql_log_min_duration_statement: 1000
+postgresql_log_line_prefix: "%t [%p]: [%l-1] user=%u,db=%d,app=%a,client=%h "
+postgresql_log_checkpoints: "on"
+postgresql_log_connections: "on"
+postgresql_log_disconnections: "on"
+postgresql_log_lock_waits: "on"
+postgresql_log_temp_files: 0
+
+# pg_hba.conf entries
+postgresql_hba_entries:
+  - type: local
+    database: all
+    user: postgres
+    method: peer
+
+#  Databases to create
+#  Remember to create the vault inventory file.
+db_list:
+  - db_name: 'mydb'
+    db_owner: 'mydbuser'
+    db_password: 'my_pass'

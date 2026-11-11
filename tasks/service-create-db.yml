@@ -24,9 +24,10 @@
 - name: Modify Database Privileges
   become: yes
   become_user: postgres
-  community.postgresql.postgresql_user:
-    roles: "{{ item.db_owner }}"
+  community.postgresql.postgresql_privs:
     login_db: "{{ item.db_name }}"
+    roles: "{{ item.db_owner }}"
+    type: database
     privs: ALL
   with_items: "{{ db_list }}"
   tags:

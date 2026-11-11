@@ -4,6 +4,14 @@
     _pg_config_dir: "{{ postgresql_config_dir }}"
     _pg_service: "{{ 'postgresql' if ansible_os_family == 'Fedora' else 'postgresql-' + postgresql_version }}"
 
+- name: Set Firewalld to allow 5432
+  firewalld:
+    immediate: true
+    permanent: true
+    service: postgresql
+    state: enabled
+  notify: restart firewalld
+
 - name: Deploy postgresql.conf
   template:
     src: postgresql.conf.j2

@@ -1,4 +1,3 @@
-#SPDX-License-Identifier: GPL-2.0-or-later
 galaxy_info:
   author: Brent R. Scott
   description: CICD Postgres Database Configuration
@@ -15,7 +14,7 @@ galaxy_info:
   # - GPL-3.0-only
   # - Apache-2.0
   # - CC-BY-4.0
-  license: GPL-2.0-or-later
+  license: None
 
   min_ansible_version: 2.1
 
